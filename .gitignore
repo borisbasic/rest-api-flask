@@ -1,0 +1,7 @@
+.venv
+.idea
+__pycache__
+instance
+worked_earlier.txt
+*.pyc
+.DS_Store
