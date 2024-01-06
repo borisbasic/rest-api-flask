@@ -9,26 +9,28 @@ from models import StoreModel
 
 from schemas import StoreSchema
 
-blp = Blueprint('stores', __name__, description='Operations on stores')
+blp = Blueprint("stores", __name__, description="Operations on stores")
 
 
-@blp.route('/store/<int:store_id>')
+@blp.route("/store/<int:store_id>")
 class Store(MethodView):
     @blp.response(200, StoreSchema)
     def get(self, store_id):
         store = StoreModel.query.get_or_404(store_id)
         return store
-        
-            
+
     def delete(self, store_id):
         store = StoreModel.query.get_or_404(store_id)
         db.session.delete(store)
         db.session.commit()
-        return {'message':'store is deleted'}
+        return {"message": "store is deleted"}
 
-@blp.route('/store')
+
+@blp.route("/store")
 class StoreList(MethodView):
-    @blp.response(200, StoreSchema(many=True))  #many=True write if we have more results
+    @blp.response(
+        200, StoreSchema(many=True)
+    )  # many=True write if we have more results
     def get(self):
         stores = StoreModel.query.all()
         return stores
@@ -41,9 +43,7 @@ class StoreList(MethodView):
             db.session.add(store)
             db.session.commit()
         except IntegrityError:
-            abort(400, message='a store with that name already exists')
+            abort(400, message="a store with that name already exists")
         except SQLAlchemyError:
-            abort(500, message='An error occured while inserting data')
+            abort(500, message="An error occured while inserting data")
         return store
-
-
